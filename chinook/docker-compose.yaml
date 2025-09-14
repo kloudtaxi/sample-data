@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  chinook-db:
+    image: postgres:16-alpine
+    container_name: chinook-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    volumes:
+      - chinook-data:/var/lib/postgresql/data
+      - ./Chinook_PostgreSql.sql:/docker-entrypoint-initdb.d/01-chinook.sql:ro
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  chinook-data:
+    name: chinook-postgres-data

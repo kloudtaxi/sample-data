@@ -1,0 +1,23 @@
+# Use postgres/example user/password credentials
+
+services:
+
+  chinook-db:
+    image: postgres
+    container_name: chinook-db
+    restart:  unless-stopped
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-chinook}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - chinook-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432" 
+    #networks:
+    #  - vanna-network
+volumes:
+  chinook-data:
+#networks:
+#  vanna-network:
+#    driver: bridge
